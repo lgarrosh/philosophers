@@ -1,37 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: arman <arman@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/22 20:33:00 by arman             #+#    #+#             */
+/*   Updated: 2022/04/23 13:43:07 by arman            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philo.h"
 
-int pth_create(pthread_t *t);
-void *test(void *p);
-
-int main()
+int main(int argc, char **argv)
 {
-	int i = 0;
-    pthread_t pth[30000];
-	for (size_t i = 0; i < 30000; i++)
-		if(pth_create(&pth[i]) != 0)
-			i = 1;
-	printf("%d\n", i);
-	pthread_join(pth[29999], NULL);
-    return (0);
+	t_data *data;
+	if (argc < 5 || 6 < argc)
+		return (ft_error("ERROR NUMBER OF THE ARGUMENT"));
+	else if (!(data = init_data(argc, argv)))
+		return (1);
+	philosophers(data);
+	return (0);
 }
 
-int pth_create(pthread_t *t)
+void philosophers(t_data *data)
 {
-	int i;
-	i = pthread_create(t, NULL, &test, NULL);
-	printf("%ld\n", *t);
-	return (i);
-}
-
-void *test(void *p)
-{
-	// pthread_mutex_t mutex;
-
-	// pthread_mutex_lock(&mutex);
-
-	usleep(1000000);
-
-	// pthread_mutex_unlock(&mutex);
-
-	return (p);
+	free((void *)data);
+	printf("%s\n", "all good");
 }
