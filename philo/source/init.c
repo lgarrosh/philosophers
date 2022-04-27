@@ -59,8 +59,8 @@ int	init_philos(t_philo **philo, t_data *data)
 
 void	init_philo(t_philo *philo, t_data *data, pthread_mutex_t *forks, pthread_t *pth)
 {
-	int	i;
-	long long int	time;z
+	int				i;
+	long long int	time;
 
 	i = -1;
 	time = find_time();
@@ -83,4 +83,6 @@ void	init_philo(t_philo *philo, t_data *data, pthread_mutex_t *forks, pthread_t 
 		(philo + i)->t_meal = time;
 		pthread_mutex_init((philo + i)->lf, NULL);
 	}
+	if (pthread_mutex_init(&data->print_mut, NULL))
+		ft_error("qwqwfqwf");
 }

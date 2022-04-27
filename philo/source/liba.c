@@ -8,7 +8,7 @@ long long int	ft_char(const char *st, int i, int c)
 	num = 0;
 	f = 922337203685477580;
 	if (!((48 <= st[i]) && (st[i] <= 57)))
-		return (-1;)
+		return (-1);
 	while ((48 <= st[i]) && (st[i] <= 57))
 	{
 		if ((i == 19) && (st[i] == '7') && (c == -1))
