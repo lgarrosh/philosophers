@@ -2,24 +2,26 @@
 
 int ft_error(const char *error)
 {
-	perror(error);
+	int len;
+
+	len = 0;
+	while (error[len])
+		len++;
+	write(2, error, len);
+	write(1, "\n", 1);
 	return (1);
 }
 
 void	ft_exit(t_philo *philo, t_data *data, const char *error)
 {
-	int i;
-
-	i = -1;
-	while (++i < data->number_philo)
-	{
-		free((void *)(philo + i)->lf);
-		(philo + i)->lf = NULL;
-		free((void *)(philo + i)->pth);
-		(philo + i)->pth = NULL;
-	}
-	free((void *)data);
 	free((void *)philo);
+	philo = NULL;
+	free((void *)data->forks);
+	data->forks = NULL;
+	free((void *)data->pth);
+	data->pth = NULL;
+	free((void *)data);
 	if (error)
 		exit(ft_error(error));
+	exit(0);
 }

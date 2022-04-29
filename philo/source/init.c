@@ -33,37 +33,33 @@ t_data *init_data(int argc, char **argv)
 
 int	init_philos(t_philo **philo, t_data *data)
 {
-	pthread_mutex_t *forks;
-	pthread_t		*pth;
-
 	*philo = (t_philo *)malloc(sizeof(t_philo) * data->number_philo);
 	if (!(*philo))
 		return (1);
-	forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) \
+	data->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) \
 				* data->number_fork);
-	if (!forks)
+	if (!data->forks)
 	{
 		free((void *)philo);
 		return (1);
 	}
-	pth = (pthread_t *)malloc(sizeof(pthread_t) * data->number_philo);
-	if (!pth)
+	data->pth = (pthread_t *)malloc(sizeof(pthread_t) * data->number_philo);
+	if (!data->pth)
 	{
 		free((void *)philo);
-		free((void *)forks);
+		free((void *)data->forks);
 		return (1);
 	}
-	init_philo(*philo, data,  forks, pth);
+	if (init_philo(*philo, data,  data->forks, data->pth))
+		ft_exit(*philo, data, NULL);
 	return (0);
 }
 
-void	init_philo(t_philo *philo, t_data *data, pthread_mutex_t *forks, pthread_t *pth)
+int	init_philo(t_philo *philo, t_data *data, pthread_mutex_t *forks, pthread_t *pth)
 {
 	int				i;
-	long long int	time;
 
 	i = -1;
-	time = find_time();
 	while(++i < data->number_philo)
 	{
 		if (i == 0)
@@ -80,9 +76,10 @@ void	init_philo(t_philo *philo, t_data *data, pthread_mutex_t *forks, pthread_t 
 		(philo + i)->index = i + 1;
 		(philo + i)->count_eat = 0;
 		(philo + i)->data = data;
-		(philo + i)->t_meal = time;
-		pthread_mutex_init((philo + i)->lf, NULL);
+		if (pthread_mutex_init((philo + i)->lf, NULL))
+			return (ft_error("ERROR: FAILED TO INIT MUTEX"));
 	}
 	if (pthread_mutex_init(&data->print_mut, NULL))
-		ft_error("qwqwfqwf");
+		return (ft_error("ERROR: FAILED TO INIT MUTEX"));
+	return (0);
 }
