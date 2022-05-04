@@ -14,6 +14,13 @@ int ft_error(const char *error)
 
 void	ft_exit(t_philo *philo, t_data *data, const char *error)
 {
+	int	i;
+
+	i = -1;
+	while (++i < philo->data->number_fork)
+		pthread_mutex_destroy((philo + i)->lf);
+	pthread_mutex_destroy(&philo->data->print_mut);
+	pthread_mutex_destroy(&philo->data->data_mut);
 	free((void *)philo);
 	philo = NULL;
 	free((void *)data->forks);

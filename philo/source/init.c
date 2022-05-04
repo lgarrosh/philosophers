@@ -10,6 +10,7 @@ t_data *init_data(int argc, char **argv)
 		ft_error("ERROR: FAILED TO GET MEMORY");
 		return (NULL);
 	}
+	memset((void *)basic, 0, sizeof(t_data));
 	basic->stop = 0;
 	basic->start_time = find_time();
 	basic->number_philo = ft_atoi(argv[1]);
@@ -36,6 +37,7 @@ int	init_philos(t_philo **philo, t_data *data)
 	*philo = (t_philo *)malloc(sizeof(t_philo) * data->number_philo);
 	if (!(*philo))
 		return (1);
+	memset(*(void **)philo, 0, sizeof(t_philo));
 	data->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) \
 				* data->number_fork);
 	if (!data->forks)
@@ -43,6 +45,7 @@ int	init_philos(t_philo **philo, t_data *data)
 		free((void *)philo);
 		return (1);
 	}
+	memset((void *)data->forks, 0, sizeof(pthread_mutex_t));
 	data->pth = (pthread_t *)malloc(sizeof(pthread_t) * data->number_philo);
 	if (!data->pth)
 	{
@@ -50,6 +53,7 @@ int	init_philos(t_philo **philo, t_data *data)
 		free((void *)data->forks);
 		return (1);
 	}
+	memset((void *)data->pth, 0, sizeof(pthread_mutex_t));
 	if (init_philo(*philo, data,  data->forks, data->pth))
 		ft_exit(*philo, data, NULL);
 	return (0);
@@ -80,6 +84,8 @@ int	init_philo(t_philo *philo, t_data *data, pthread_mutex_t *forks, pthread_t *
 			return (ft_error("ERROR: FAILED TO INIT MUTEX"));
 	}
 	if (pthread_mutex_init(&data->print_mut, NULL))
+		return (ft_error("ERROR: FAILED TO INIT MUTEX"));
+	if (pthread_mutex_init(&data->data_mut, NULL))
 		return (ft_error("ERROR: FAILED TO INIT MUTEX"));
 	return (0);
 }

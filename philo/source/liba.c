@@ -50,3 +50,13 @@ long long int	ft_atoi(const char *str)
 	}
 	return (0);
 }
+
+int	ft_strlen(const char *str)
+{
+	int	len;
+
+	len = 0;
+	while(str[len])
+		len++;
+	return (len);
+}
