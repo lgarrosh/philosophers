@@ -6,27 +6,26 @@
 /*   By: lgarrosh <lgarrosh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 20:33:00 by arman             #+#    #+#             */
-/*   Updated: 2022/05/04 15:30:21 by lgarrosh         ###   ########.fr       */
+/*   Updated: 2022/05/05 16:47:39 by lgarrosh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	t_data *data;
+	t_data	*data;
 
 	if (argc < 5 || 6 < argc)
 		return (ft_error("ERROR NUMBER OF THE ARGUMENT"));
-	else if (!(data = init_data(argc, argv)))
+	else if (init_data(argc, argv, &data))
 		return (1);
-	philosophers(data);
-	return (0);
+	return (philosophers(data));
 }
 
-void *start(void *args)
+void	*start(void *args)
 {
-	t_philo *p;
+	t_philo	*p;
 
 	p = (t_philo *)args;
 	while (1)
@@ -39,7 +38,7 @@ void *start(void *args)
 	return (NULL);
 }
 
-void	ft_creat_thread(t_philo *philo, t_data *data)
+int	ft_creat_thread(t_philo *philo, t_data *data)
 {
 	int	i;
 
@@ -50,20 +49,32 @@ void	ft_creat_thread(t_philo *philo, t_data *data)
 		philo->start_philo = find_time();
 		(philo + i)->t_meal = find_time();
 		if (pthread_create((philo + i)->pth, NULL, &start, (philo + i)))
-			ft_exit(philo, data, "ERROR: FAILED TO CREATE THREAD");
+		{
+			ft_free(philo);
+			return (1);
+		}
 		pthread_detach(*(philo + i)->pth);
 		usleep(50);
 	}
 	if (pthread_create(&data->pth_check, NULL, &check_philo, philo))
-		ft_exit(philo, data, "ERROR: FAILED TO CREATE THREAD");
+	{
+		ft_free(philo);
+		return (1);
+	}
 	pthread_join(data->pth_check, NULL);
+	ft_free(philo);
+	return (0);
 }
 
-void philosophers(t_data *data)
+int	philosophers(t_data *data)
 {
 	t_philo	*philo;
 
 	if (init_philos(&philo, data))
-		exit(ft_error("test"));
-	ft_creat_thread(philo, data);
+		return (ft_error("test"));
+	if (pthread_mutex_init(&philo->data->print_mut, NULL))
+		return (ft_error("ERROR: FAILED TO INIT MUTEX"));
+	if (pthread_mutex_init(&philo->data->data_mut, NULL))
+		return (ft_error("ERROR: FAILED TO INIT MUTEX"));
+	return (ft_creat_thread(philo, data));
 }

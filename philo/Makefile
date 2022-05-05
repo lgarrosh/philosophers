@@ -4,7 +4,7 @@ SRC_F = source/main.c source/error.c \
 		source/utils.c
 OBJ_F = $(SRC_F:.c=.o)
 HEAD = include/philo.h
-FLAGS = -Wall -Wextra -Werror -pthread -fsanitize=thread -g
+FLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
@@ -13,8 +13,6 @@ $(NAME): $(OBJ_F) $(HEAD)
 	
 %.o: %.c
 	cc $(FLAGS) -c $< -o $@
-
-bonus:
 
 clean:
 	rm -rf $(OBJ_F)

@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lgarrosh <lgarrosh@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/05 16:04:01 by lgarrosh          #+#    #+#             */
+/*   Updated: 2022/05/05 16:04:12 by lgarrosh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philo.h"
 
-int ft_error(const char *error)
+int	ft_error(const char *error)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	while (error[len])
@@ -12,7 +24,7 @@ int ft_error(const char *error)
 	return (1);
 }
 
-void	ft_exit(t_philo *philo, t_data *data, const char *error)
+void	ft_free(t_philo *philo)
 {
 	int	i;
 
@@ -21,14 +33,8 @@ void	ft_exit(t_philo *philo, t_data *data, const char *error)
 		pthread_mutex_destroy((philo + i)->lf);
 	pthread_mutex_destroy(&philo->data->print_mut);
 	pthread_mutex_destroy(&philo->data->data_mut);
+	free((void *)philo->data->forks);
+	free((void *)philo->data->pth);
+	free((void *)philo->data);
 	free((void *)philo);
-	philo = NULL;
-	free((void *)data->forks);
-	data->forks = NULL;
-	free((void *)data->pth);
-	data->pth = NULL;
-	free((void *)data);
-	if (error)
-		exit(ft_error(error));
-	exit(0);
 }

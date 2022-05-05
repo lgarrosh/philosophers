@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   liba.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lgarrosh <lgarrosh@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/05 16:26:11 by lgarrosh          #+#    #+#             */
+/*   Updated: 2022/05/05 16:29:22 by lgarrosh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philo.h"
 
 long long int	ft_char(const char *st, int i, int c)
@@ -21,13 +33,15 @@ long long int	ft_char(const char *st, int i, int c)
 			return (-2);
 		i++;
 	}
+	if (st[i] != '\0')
+		return (-1);
 	return (num);
 }
 
 long long int	ft_atoi(const char *str)
 {
-	int	i;
-	int	s;
+	int				i;
+	int				s;
 	long long int	q;
 
 	i = 0;
@@ -45,7 +59,7 @@ long long int	ft_atoi(const char *str)
 			i++;
 		q = ft_char(str, i, s);
 		if (q < 0)
-            return (-1);
+			return (-1);
 		return (q * s);
 	}
 	return (0);
@@ -56,7 +70,28 @@ int	ft_strlen(const char *str)
 	int	len;
 
 	len = 0;
-	while(str[len])
+	while (str[len])
 		len++;
 	return (len);
+}
+
+long long int	find_time(void)
+{
+	struct timeval	t;
+
+	gettimeofday(&t, NULL);
+	return ((t.tv_sec * 1000) + (t.tv_usec / 1000));
+}
+
+void	ft_sleep(long long int time)
+{
+	long long int	tmp;
+
+	tmp = find_time();
+	while (1)
+	{
+		if ((find_time() - tmp) >= time)
+			break ;
+		usleep(100);
+	}
 }
