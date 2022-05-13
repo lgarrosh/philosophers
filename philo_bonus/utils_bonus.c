@@ -6,7 +6,7 @@
 /*   By: lgarrosh <lgarrosh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 16:00:29 by lgarrosh          #+#    #+#             */
-/*   Updated: 2022/05/06 19:26:05 by lgarrosh         ###   ########.fr       */
+/*   Updated: 2022/05/13 14:11:41 by lgarrosh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ static int	nujobilo(t_philo *p)
 
 void	*check_philo(void *args)
 {
-	t_philo			*p;
+	t_philo	*p;
+	char	*name;
 
 	p = (t_philo *)args;
 	while (1)
@@ -56,10 +57,43 @@ void	*check_philo(void *args)
 		sem_wait(p->sem_printf);
 		sem_wait(p->sem_data);
 		if (nujobilo(p))
-			exit (0);
-		sem_wait(p->sem_data);
+			break ;
+		sem_post(p->sem_data);
 		sem_post(p->sem_printf);
 		usleep(1000);
 	}
+	sem_close(p->sem_data);
+	name = make_n_name("philo", p->index);
+	sem_unlink(name);
+	free(name);
+	exit (0);
 	return (NULL);
+}
+
+char	*make_n_name(char *name, int n)
+{
+	char	*result;
+	int		num;
+	int		i;
+
+	i = 0;
+	num = n;
+	while (num)
+	{
+		num /= 10;
+		++i;
+	}
+	result = malloc(sizeof(char) * (i + ft_strlen(name) + 1));
+	if (result == NULL)
+		return (NULL);
+	num = -1;
+	while (++num < i)
+		result[num] = name[num];
+	while (n)
+	{
+		result[i++] = n % 10 + '0';
+		n /= 10;
+	}
+	result[i] = 0;
+	return (result);
 }

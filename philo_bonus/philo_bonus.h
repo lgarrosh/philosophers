@@ -6,7 +6,7 @@
 /*   By: lgarrosh <lgarrosh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 19:35:09 by lgarrosh          #+#    #+#             */
-/*   Updated: 2022/05/06 19:22:28 by lgarrosh         ###   ########.fr       */
+/*   Updated: 2022/05/13 13:26:22 by lgarrosh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,6 @@ int				init_philo(int argc, char **argv, t_philo **philo);
 void			print_phil(t_philo *p, const char *str);
 void			print_eating(t_philo *p);
 void			*check_philo(void *args);
+char			*make_n_name(char *name, int n);
 
 #endif

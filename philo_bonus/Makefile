@@ -10,7 +10,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ_F) $(HEAD)
 	cc $(FLAGS) -I $(HEAD) $(OBJ_F) -o $(NAME)
-	
+
 %.o: %.c
 	cc $(FLAGS) -c $< -o $@
 

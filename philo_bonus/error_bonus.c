@@ -6,7 +6,7 @@
 /*   By: lgarrosh <lgarrosh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 19:10:09 by lgarrosh          #+#    #+#             */
-/*   Updated: 2022/05/06 19:26:57 by lgarrosh         ###   ########.fr       */
+/*   Updated: 2022/05/13 13:44:18 by lgarrosh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,8 @@ void	ft_exit(t_philo **philo, const char *error)
 	while (++i < (*philo)->number_philo)
 		kill((*philo)->pid[i], SIGKILL);
 	sem_close((*philo)->sem_printf);
-	sem_close((*philo)->sem_data);
 	sem_close((*philo)->sem_fork);
 	sem_unlink("/sem_print");
-	sem_unlink("/sem_data");
 	sem_unlink("/sem_forks");
 	free((void *)(*philo)->pid);
 	(*philo)->pid = NULL;

@@ -6,7 +6,7 @@
 /*   By: lgarrosh <lgarrosh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 19:40:09 by lgarrosh          #+#    #+#             */
-/*   Updated: 2022/05/06 19:24:39 by lgarrosh         ###   ########.fr       */
+/*   Updated: 2022/05/13 17:55:55 by lgarrosh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,15 @@ int	init_philo(int argc, char **argv, t_philo **philo)
 	*philo = (t_philo *)malloc(sizeof(t_philo));
 	if (!(*philo))
 		return (ft_error("ERROR: MALLOC (PHILO)"));
-	if (init_data(argc, argv, *philo))
+	(*philo)->pid = (int *)malloc(sizeof(int) * (*philo)->number_philo);
+	if (init_data(argc, argv, *philo) || !(*philo)->pid)
 	{
 		free(*(void **)philo);
 		return (1);
 	}
-	(*philo)->pid = (int *)malloc(sizeof(int) * (*philo)->number_philo);
-	if (!(*philo)->pid)
-	{
-		free(*(void **)philo);
-		return (ft_error("ERROR: MALLOC (INIT PID)"));
-	}
+	sem_unlink("/sem_print");
+	sem_unlink("/sem_forks");
 	(*philo)->sem_printf = sem_open("/sem_print", O_CREAT, 0644, 1);
-	(*philo)->sem_data = sem_open("/sem_data", O_CREAT, 0644, 1);
 	(*philo)->sem_fork = sem_open("/sem_forks", O_CREAT, \
 								0644, (*philo)->number_fork);
 	if ((*philo)->sem_printf <= 0 || (*philo)->sem_fork <= 0)
